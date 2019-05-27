@@ -6,3 +6,4 @@ final test
 then another change
 change 2
 change 3
+changes in master
