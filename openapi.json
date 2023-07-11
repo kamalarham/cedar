@@ -1,0 +1,567 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "RDX Rest service",
+    "description" : "RDX Rest Services",
+    "version" : "1.0"
+  },
+  "servers" : [ {
+    "url" : "/ionweb/r/restapi/RDXHUB"
+  } ],
+  "security" : [ {
+    "IonWebCookieAuth" : [ ]
+  }, {
+    "IonWebBasicAuth" : [ ]
+  } ],
+  "paths" : {
+    "/binary/{EntityPath:.+}" : {
+      "get" : {
+        "summary" : "Returns binary specified in URI subject to user entitlements to view",
+        "operationId" : "downloadBinary",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : { }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The stored binary location",
+            "headers" : {
+              "Location" : {
+                "description" : "Location of the existing binary resource",
+                "style" : "simple"
+              }
+            },
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "400" : {
+            "description" : "Invalid search request arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Remove an existing entity or its sub-entity",
+        "operationId" : "removeBinary",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Request submitted for 4-eyes approval",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rest4EyesMessage"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Delete completed successfully",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Entity not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error / Request not processable / Four-Eyes request submission failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "patch" : {
+        "summary" : "Modify an existing entity or its sub-entity",
+        "operationId" : "uploadBinary",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "*/*" : { }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The updated entity",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "202" : {
+            "description" : "Request submitted for 4-eyes approval",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rest4EyesMessage"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Entity not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error / Request not processable / Four-Eyes request submission failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{EntityPath:.+}" : {
+      "get" : {
+        "summary" : "Returns entity specified in URI subject to user entitlements to view",
+        "operationId" : "getEntity",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : { }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The stored entity location",
+            "headers" : {
+              "Location" : {
+                "description" : "Location of the existing resource",
+                "style" : "simple"
+              }
+            },
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "400" : {
+            "description" : "Invalid search request arguments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Create a new entity or sub-entity for an existing entity",
+        "operationId" : "createEntity",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : { }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Location of the created entity",
+            "headers" : {
+              "Location" : {
+                "description" : "Location of the created entity",
+                "style" : "simple"
+              }
+            },
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "202" : {
+            "description" : "Request submitted for 4-eyes approval",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rest4EyesMessage"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflicting entity already exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error / Request not processable / Four-Eyes request submission failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete an existing entity or its sub-entity",
+        "operationId" : "deleteEntity",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Request submitted for 4-eyes approval",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rest4EyesMessage"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Delete completed successfully",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Entity not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error / Request not processable / Four-Eyes request submission failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "patch" : {
+        "summary" : "Modify an existing entity or its sub-entity",
+        "operationId" : "updateEntity",
+        "parameters" : [ {
+          "name" : "EntityPath",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "If-Match",
+          "in" : "header",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : { }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Entity unchanged",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "202" : {
+            "description" : "Request submitted for 4-eyes approval",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Rest4EyesMessage"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input data",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "User action forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Entity not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflicting entity already exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error / Request not processable / Four-Eyes request submission failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestServiceError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Rest4EyesMessage" : {
+        "type" : "object",
+        "properties" : {
+          "Message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RestServiceError" : {
+        "type" : "object",
+        "properties" : {
+          "errorCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "ErrorMessage" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "IonWebCookieAuth" : {
+        "type" : "apiKey",
+        "name" : "restJSESSIONID",
+        "in" : "cookie"
+      },
+      "IonWebBasicAuth" : {
+        "type" : "http",
+        "scheme" : "basic"
+      }
+    }
+  }
+}
