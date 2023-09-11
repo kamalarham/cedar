@@ -222,7 +222,7 @@
         }
       }
     },
-    "/{EntityPath:.+}" : {
+    "/{EntityPath}" : {
       "get" : {
         "summary" : "Returns entity specified in URI subject to user entitlements to view",
         "operationId" : "getEntity",
