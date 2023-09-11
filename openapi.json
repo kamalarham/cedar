@@ -6,7 +6,7 @@
     "version" : "1.0"
   },
   "servers" : [ {
-    "url" : "/ionweb/r/restapi/RDXHUB"
+    "url" : "http://localhost:8080/ionweb/r/restapi/RDXHUB"
   } ],
   "security" : [ {
     "IonWebCookieAuth" : [ ]
